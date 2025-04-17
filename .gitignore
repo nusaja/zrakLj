@@ -5,3 +5,6 @@ src/data/ljubljana.db
 
 # Logs
 logs/
+
+# Ignore backup/archive code
+src/sections/results_archive.php
