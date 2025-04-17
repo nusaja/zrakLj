@@ -1,1 +1,4 @@
-dataHistory.csv
+dailyHistory.csv
+hourlyHistory.csv
+logs/
+storage/ljubljana.db
