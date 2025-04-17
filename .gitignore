@@ -1,4 +1,7 @@
-dailyHistory.csv
-hourlyHistory.csv
+# Ignore generated data
+src/data/dailyHistory.csv
+src/data/hourlyHistory.csv
+src/data/ljubljana.db
+
+# Logs
 logs/
-storage/ljubljana.db
