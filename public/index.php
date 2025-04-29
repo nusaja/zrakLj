@@ -62,19 +62,31 @@ $history = array_slice($history, -30);
     <title>Zrak v Ljubljani</title>
 </head>
 
-<body style='background:
-              linear-gradient(rgba(255, 255, 255, 0),
-              rgba(255, 255, 255, 0.45),
-              rgba(255, 255, 255, 0.7),
-              rgba(255, 255, 255, 0.9)), url("<?php echo $answer . ".jpg"; ?>");'>
+<body>
 
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="logo">zrakLJ</div>
+        <ul class="nav-links">
+            <li><a href="#grafi">Pogled nazaj</a></li>
+            <li><a href="#resitve">Glasuj</a></li>
+            <li><a href="#mejne-vrednosti">O mejnih vrednostih</a></li>
+
+        </ul>
+    </nav>
+
+    <div id="title"> 
+        <h1>Preveri varnost zraka:</h1>
+    </div>
+
+    <!-- GEOLOCATOR -->
     <div style="padding: 20px;">
         <button onclick="tryGeolocate()">📍 Uporabi mojo lokacijo za izbor najbližje merilne postaje</button>
     </div>
 
     <!-- AREA SELECTOR FORM -->
     <div style="padding: 20px;">
-    <label for="area">Izberi področje, ki te zanima:</label>
+    <label for="area">Izberi področje:</label>
     <select name="area" id="area">
         <option value="bezigrad" <?= $area == 'bezigrad' ? 'selected' : '' ?>>Bežigrad</option>
         <option value="sis" <?= $area == 'sis' ? 'selected' : '' ?>>Šiška</option>
@@ -83,23 +95,40 @@ $history = array_slice($history, -30);
     </div>
 
     <section id="current-status" style="padding: 20px;">
-        <h1>Kako varno je dihanje v Ljubljani? Preveri:</h1>
         <div class="answer"><?= renderAirStatus($current_air) ?></div>
 
         <?php if ($current_air === "JA"): ?>
-            <h2>Trenutni zastrupljevalci:</h2>
+            <h2>Trenutni onesnaževalci:</h2>
             <ul>
                 <?php foreach ($current_pollutants as $key => $value): ?>
                     <li><?= $key ?>: <?= $value ?> µg/m³</li>
                 <?php endforeach; ?>
             </ul>
         <?php else: ?>
-            <p>Vrednosti glavnih onesnaževalcev trenutno <strong>ne presegajo</strong> mejnih vrednosti WHO.</p>
+            <p>Vrednosti glavnih onesnaževalcev v pretekli uri <strong>niso presegle</strong> mejnih vrednosti WHO.</p>
         <?php endif; ?>
     </section>
 
-    <?php require(__DIR__ . '/../src/sections/airOverview.php'); ?>
-    <?php require(__DIR__ . '/../src/sections/solutions.php'); ?>
+    <!-- POGLED NAZAJ -->
+    <section id="grafi">
+        <?php require(__DIR__ . '/../src/sections/airOverview.php'); ?>
+    </section>
+
+    <!-- REŠITVE -->
+    <section id="resitve">
+        <?php require(__DIR__ . '/../src/sections/solutions.php'); ?>
+    </section>
+
+    <!-- O MEJNIH VREDNOSTIH -->
+    <section id="mejne-vrednosti" style="padding: 20px;">
+        <?php require(__DIR__ . '/../src/sections/values.php'); ?>
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer>
+        <p>Vir podatkov: ARSO | &copy; 2025 zrakLJ</p>
+    </footer>
 
     <script src="/assets/script.js"></script>
 

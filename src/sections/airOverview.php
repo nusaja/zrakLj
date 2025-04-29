@@ -1,8 +1,6 @@
-<section id="history">
+<h2>Pogled nazaj</h2>
 
-    <h2>Pogled nazaj</h2>
-
-    <h3>Prikaz zadnjih 30 dni</h3>
+<h3>Prikaz zadnjih 30 dni</h3>
 
     <div id="history-display"> 
         
@@ -15,5 +13,3 @@
         <?php }; ?>
 
     </div>
-
-</section>

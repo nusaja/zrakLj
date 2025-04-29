@@ -196,7 +196,7 @@ function get_closest_station_name($user_lat, $user_lon) {
 }
 
 function renderAirStatus($answer) {
-    return $answer === "JA" ? "NEZDRAVO" : "ZDRAVO";
+    return $answer === "JA" ? "NEVARNO" : "VARNO";
 }
 
 getPolicy();
