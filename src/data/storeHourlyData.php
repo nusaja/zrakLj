@@ -47,7 +47,7 @@ foreach ($stations as $name => $station) {
         continue;
     }
 
-    $row = [$timestamp, $name, ''];
+    $row = [$timestamp, $name];    
     foreach (array_keys(AIR_FIELDS_HOURLY) as $pollutant) {
         $row[] = $station['values'][$pollutant] ?? '';
     }
