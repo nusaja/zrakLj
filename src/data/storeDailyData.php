@@ -1,53 +1,73 @@
-<?php 
+<?php
+/**
+ * Cron: shrani zadnje dnevne podatke ARSO v dailyHistory.csv.
+ * CSV format: datum, postaja, [prazno zgodovinsko JA/NE], PM2.5, PM10, OZON, SO2, NO2.
+ * Tretji stolpec ostane prazen zaradi združljivosti z get_daily_history().
+ */
+require_once __DIR__ . '/../model.php';
 
-require_once(__DIR__ . '/../config.php');
-require_once(__DIR__ . '/../model.php');
+$xml = get_arso_data(ARSO_DAILY_URL);
+if ($xml === null) {
+    error_log('ARSO: dnevni XML ni na voljo.');
+    exit(1);
+}
+$stations = read_air_stations($xml, 'daily');
+$path = __DIR__ . '/dailyHistory.csv';
+$fp = @fopen($path, 'c+');
+if ($fp === false) {
+    error_log('Ni mogoče odpreti CSV: ' . $path);
+    exit(1);
+}
+if (!flock($fp, LOCK_EX)) {
+    fclose($fp);
+    exit(1);
+}
 
-$daily_url = 'http://www.arso.gov.si/xml/zrak/ones_zrak_dnevni_podatki_zadnji.xml';
-$stations = get_all_ljubljana_stations();
-$xml = get_arso_data($daily_url);
-
-$csv_path = __DIR__ . '/dailyHistory.csv';
-
-$first_datum = (string) $xml->postaja[0]->datum;
-
-$existing_dates = [];
-if (file_exists($csv_path)) {
-    if (($handle = fopen($csv_path, 'r')) !== false) {
-        while (($row = fgetcsv($handle)) !== false) {
-            $existing_dates[$row[0]] = true; 
-        }
-        fclose($handle);
+$seen = [];
+rewind($fp);
+while (($row = fgetcsv($fp)) !== false) {
+    if (count($row) >= 2) {
+        $seen[trim((string) $row[0]) . '|' . trim((string) $row[1])] = true;
     }
 }
 
-if (isset($existing_dates[$first_datum])) {
-    exit("Daily data already stored for $first_datum\n");
-}
-
-$fp = fopen($csv_path, 'a');
-
-
-foreach ($stations as $station_name => $station_data) {
-    $values = $station_data['values'];
-    $answer = $station_data['answer'];
-
-    foreach ($xml->postaja as $entry) {
-        if ((string) $entry->merilno_mesto === $station_name) {
-            $datum = (string) $entry->datum;
-            break;
-        }
+fseek($fp, 0, SEEK_END);
+$added = 0;
+$failed = false;
+foreach ($stations as $name => $station) {
+    $rawDate = trim((string) ($station['date'] ?? ''));
+    if ($rawDate === '') {
+        $rawDate = trim((string) ($station['date_to'] ?? ''));
+    }
+    if ($rawDate === '') {
+        continue;
+    }
+    // Datum je ključ dnevnega zapisa; čas ni del dnevnega CSV.
+    $date = substr($rawDate, 0, 10);
+    $parsed = DateTimeImmutable::createFromFormat('!Y-m-d', $date);
+    if ($parsed === false || $parsed->format('Y-m-d') !== $date) {
+        error_log('Neveljaven datum ARSO: ' . $rawDate);
+        continue;
+    }
+    $key = $date . '|' . $name;
+    if (isset($seen[$key])) {
+        continue;
     }
 
-    $line = [$datum, $station_name, $answer];
-
-    $pollutants = ["PM2.5", "PM10", "OZON", "SO2", "NO2"];
-
-    foreach ($pollutants as $key) {
-        $line[] = isset($values[$key]) ? $values[$key] : null;
+    $row = [$date, $name, ''];
+    foreach (array_keys(AIR_FIELDS_DAILY) as $pollutant) {
+        $row[] = $station['values'][$pollutant] ?? '';
     }
-
-    fputcsv($fp, $line);
+    if (fputcsv($fp, $row) === false) {
+        error_log('Napaka pri zapisovanju: ' . $path);
+        $failed = true;
+        break;
+    }
+    $seen[$key] = true;
+    $added++;
 }
-
+fflush($fp);
+flock($fp, LOCK_UN);
 fclose($fp);
+echo "Dodanih dnevnih vrstic: {$added}\n";
+exit($failed ? 1 : 0);

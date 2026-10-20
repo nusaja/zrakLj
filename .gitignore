@@ -1,10 +1,17 @@
-# Ignore generated data
-src/data/dailyHistory.csv
-src/data/hourlyHistory.csv
-src/data/ljubljana.db
+# Generated data
+src/data/*History.csv
+src/data/*History-backup.csv
+src/data/*.db
 
 # Logs
 logs/
 
-# Ignore backup/archive code
-src/sections/results_archive.php
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
+# Editor and system files
+.vscode/
+.DS_Store
+Thumbs.db

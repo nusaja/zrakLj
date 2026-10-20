@@ -1,13 +1,28 @@
 # zrakLJ 🌬️
-  
-A simple, location-aware web app that shows whether the air in Ljubljana is safe based on WHO limits.
 
----
+Spletna aplikacija za spremljanje kakovosti zraka v Ljubljani.
 
-## 🌐 Live Website
+Prikazuje trenutne meritve onesnaženosti zraka na treh merilnih postajah (Bežigrad, Celovška in Vič), zgodovinske podatke ter primerjavo letnih koncentracij z mejnimi vrednostmi EU in smernicami WHO.
 
-[https://zraklj.si](https://zraklj.si)
-[https://www.zraklj.si](https://www.zraklj.si)
+### Funkcionalnosti
 
----
+- Meritve kakovosti zraka v zadnji uri
+- Pregled zgodovinskih meritev z interaktivnimi grafi
+- Primerjava dolgoročnih koncentracij z EU in WHO
+- Predlogi ukrepov za izboljšanje kakovosti zraka
 
+### Tehnologije
+
+PHP · JavaScript · HTML · CSS · Chart.js · CSV
+
+### Podatki
+
+Vir meritev je Agencija Republike Slovenije za okolje (ARSO). Podatki se samodejno pridobivajo iz javno dostopnih XML-datotek in shranjujejo v CSV.
+
+### 🌐 Spletna stran
+
+https://zraklj.si
+
+### Avtorica
+
+Nuša Jazbinšek
