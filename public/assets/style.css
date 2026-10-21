@@ -105,7 +105,7 @@ a {
 .hero h1 {
   max-width: 1150px;
   margin: 0;
-  font-size: clamp(64px, 10vw, 155px);
+  font-size: clamp(64px, 10vw, 140px);
   font-weight: 800;
   line-height: 0.88;
   letter-spacing: -0.09em;
@@ -143,9 +143,10 @@ a {
   text-transform: uppercase;
 }
 
-.section-nav a:hover {
-  text-decoration: underline;
-  text-underline-offset: 5px;
+.section-nav a:hover,
+.section-nav a.is-active {
+    text-decoration: underline;
+    text-underline-offset: 5px;
 }
 
 /* ==========================================
@@ -1057,13 +1058,18 @@ a {
 
   .solutions-actions {
     width: 100%;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-  }
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+}
 
-  .solutions-action {
-    flex: 1 1 180px;
-  }
+.solutions-action {
+    flex: 0 0 auto;
+    width: 100%;
+    min-width: 0;
+    white-space: normal;
+    text-align: center;
+}
 }
 
 /* ==========================================
@@ -1321,13 +1327,8 @@ a {
 }
 
 .current-air-legend {
-    max-width: 850px;
-    margin-top: 16px;
-    margin-bottom: 0;
-}
-
-.current-air-legend .chart-reference-legend-row:first-child {
-    border-top: 1px solid var(--soft-line);
+    max-width: none;
+    margin: 0;
 }
 
 @media (max-width: 700px) {
@@ -1406,3 +1407,123 @@ a {
       animation: none;
     }
   }
+
+/* ==========================================
+   TRENUTNE MERITVE - LEGENDA IN ONESNAZEVALA
+   ========================================== */
+
+.current-air-info {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(4, minmax(76px, auto));
+    column-gap: 40px;
+    row-gap: 0;
+    margin-top: 24px;
+}
+
+.current-air-info-column {
+    display: grid;
+    grid-row: 1 / span 4;
+    grid-template-rows: subgrid;
+    min-width: 0;
+}
+
+.current-air-info-title {
+    margin: 0 0 16px;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0;
+}
+
+.current-air-info .chart-reference-legend {
+    margin: 0;
+}
+
+.current-air-info .chart-reference-legend-row,
+.pollutant-info-row {
+    min-height: 0;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--soft-line);
+}
+
+.pollutant-info-list {
+    border-top: 1px solid var(--soft-line);
+}
+
+.pollutant-info-row {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+}
+
+.pollutant-info-row strong {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.pollutant-info-row span {
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+
+@media (max-width: 700px) {
+
+    .current-air-info {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        gap: 0;
+    }
+
+    .current-air-info-column {
+        display: block;
+        grid-row: auto;
+        grid-template-rows: none;
+    }
+
+    .current-air-info .chart-reference-legend-row,
+    .current-air-info .pollutant-info-row {
+        height: auto;
+        min-height: 0;
+        padding: 16px 0;
+        border-bottom: 1px solid var(--soft-line);
+    }
+
+    .current-air-info .chart-reference-legend,
+    .current-air-info .pollutant-info-list {
+        border-top: none;
+    }
+
+    .current-air-info .chart-reference-legend-row:first-child {
+        border-top: 0;
+    }
+
+    .current-air-info .chart-reference-legend-name,
+    .current-air-info .pollutant-info-row strong {
+        font-family: 'Roboto Mono', monospace;
+        font-size: 10px;
+        font-weight: 700;
+        line-height: 1.5;
+    }
+
+    .current-air-info .pollutant-info-row {
+        padding-left: 26px;
+    }
+
+    .current-air-info .pollutant-info-row span {
+        font-size: 12px;
+        line-height: 1.5;
+    }
+}
+
+@media (min-width: 701px) {
+    .current-air-info .chart-reference-legend,
+    .current-air-info .pollutant-info-list {
+        display: contents;
+    }
+}

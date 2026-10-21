@@ -14,7 +14,7 @@ $hourly_data = get_current_air_quality();
 
 $area = $_GET['area'] ?? 'bezigrad';
 
-if (!is_string($area) || !isset($AREA_TO_STATION[$area])) {
+if (!is_string($area) || !isset(AREA_TO_STATION[$area])) {
     $area = 'bezigrad';
 }
 
@@ -38,7 +38,7 @@ if (
 
         $nearestArea = array_search(
             $nearest,
-            $AREA_TO_STATION,
+            AREA_TO_STATION,
             true
         );
 
@@ -48,7 +48,7 @@ if (
     }
 }
 
-$selected_station_name = $AREA_TO_STATION[$area];
+$selected_station_name = AREA_TO_STATION[$area];
 
 // ==========================================
 // ČAS ZADNJIH URNIH MERITEV
@@ -59,7 +59,7 @@ $measurementTo = null;
 $measurementPeriods = [];
 $allStationsHavePeriod = true;
 
-foreach ($AREA_TO_STATION as $stationName) {
+foreach (AREA_TO_STATION as $stationName) {
     $station = $hourly_data[$stationName] ?? null;
 
     if (!is_array($station)) {
@@ -100,7 +100,7 @@ foreach ($AREA_TO_STATION as $stationName) {
 
 if (
     $allStationsHavePeriod &&
-    count($measurementPeriods) === count($AREA_TO_STATION)
+    count($measurementPeriods) === count(AREA_TO_STATION)
 ) {
     $firstPeriod = $measurementPeriods[0];
     $samePeriod = true;
@@ -125,7 +125,7 @@ if (
 // PODATKI ZA GRAF
 // ==========================================
 
-$dailyHistory = get_daily_history(180);
+$dailyHistory = get_daily_history(360);
 $hourlyHistory = get_hourly_history();
 
 /**
@@ -182,7 +182,7 @@ $chartReferencesJson = encode_page_json($chartReferences);
         name="description"
         content="Preveri kakovost zraka v Ljubljani. Trenutne meritve PM2.5, PM10, NO₂ in O₃, zgodovina onesnaženosti ter primerjava z mejnimi vrednostmi EU in smernicami WHO."    >
 
-    <title>zrakLJ — Kakovost zraka v Ljubljani</title>
+    <title>zrakLJ: Kakovost zraka v Ljubljani</title>
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2">
 
@@ -194,7 +194,7 @@ $chartReferencesJson = encode_page_json($chartReferences);
     <meta property="og:type" content="website">
     <meta property="og:locale" content="sl_SI">
     <meta property="og:site_name" content="zrakLJ">
-    <meta property="og:title" content="zrakLJ — Kakovost zraka v Ljubljani">
+    <meta property="og:title" content="zrakLJ: Kakovost zraka v Ljubljani">
     <meta property="og:description"
         content="Kako kakovosten je zrak v Ljubljani? Preveri trenutne meritve, zgodovino onesnaženosti in dolgoročne trende.">
     <meta property="og:url" content="https://zraklj.si/">
@@ -255,19 +255,19 @@ $chartReferencesJson = encode_page_json($chartReferences);
             aria-label="Vsebina"
         >
             <a href="#trenutno">
-                01 — TRENUTNO STANJE
+                01 - TRENUTNO STANJE
             </a>
 
             <a href="#grafi">
-                02 — ARHIV MERITEV
+                02 - ARHIV MERITEV
             </a>
 
             <a href="#dolgorocno">
-                03 — DOLGOROČNO STANJE
+                03 - DOLGOROČNO STANJE
             </a>
 
             <a href="#izboljsave">
-                04 — IZBOLJŠAVE
+                04 - IZBOLJŠAVE
             </a>
         </nav>
 
@@ -379,57 +379,95 @@ $chartReferencesJson = encode_page_json($chartReferences);
             // Barve prevzamemo iz iste EEA konfiguracije kot graf.
             $eeaLegendCategories = array_values(EU_AQI_CATEGORIES);
             $eeaLegendRows = [
-                [0, 'DOBRO', 'Nizka onesnaženost zraka.'],
-                [1, 'ZADOVOLJIVO', 'Sprejemljiva onesnaženost zraka.'],
-                [2, 'ZMERNO', 'Povečana onesnaženost zraka.'],
-                [3, 'SLABO / ZELO SLABO / IZREDNO SLABO', 'Visoka do izredno visoka onesnaženost zraka.'],
+                [0, 'DOBRO', 'Nizka onesnaženost zraka. Običajne aktivnosti na prostem.'],
+                [1, 'ZADOVOLJIVO', 'Sprejemljiva onesnaženost zraka. Običajne aktivnosti na prostem.'],
+                [2, 'ZMERNO', 'Povečana onesnaženost zraka. Odsvetovana intenzivna vadba na prostem za občutljive skupine.'],
+                [3, 'SLABO / ZELO SLABO / IZREDNO SLABO', 'Visoka do izredno visoka onesnaženost zraka. Odsvetovana intenzivna vadba na prostem.'],
             ];
             ?>
 
-            <div
-                class="current-air-legend chart-reference-legend"
-                aria-label="Legenda kategorij kakovosti zraka"
-            >
-                <?php foreach ($eeaLegendRows as [$categoryIndex, $categoryName, $categoryDescription]): ?>
-                    <?php
-                    $categoryData = $eeaLegendCategories[$categoryIndex] ?? [];
-                    $categoryColor = is_array($categoryData)
-                        ? ($categoryData['color'] ?? '')
-                        : '';
+ 
+<div class="current-air-info">
 
-                    // Če konfiguracija ne vsebuje barve, ne izmišljamo nove.
-                    $categoryColor = is_string($categoryColor) &&
-                        preg_match('/^#[0-9a-fA-F]{3,8}$/', $categoryColor)
-                        ? $categoryColor
-                        : '';
-                    ?>
+    <div class="current-air-info-column">
 
-                    <div class="chart-reference-legend-row">
-                        <span
-                            class="chart-reference-legend-color"
-                            aria-hidden="true"
-                            <?= $categoryColor !== ''
-                                ? 'style="background-color: ' .
-                                  htmlspecialchars($categoryColor, ENT_QUOTES, 'UTF-8') .
-                                  '"'
-                                : '' ?>
-                        ></span>
+        <div
+            class="current-air-legend chart-reference-legend"
+            aria-label="Legenda kategorij kakovosti zraka"
+        >
+            <?php foreach ($eeaLegendRows as [$categoryIndex, $categoryName, $categoryDescription]): ?>
+                <?php
+                $categoryData = $eeaLegendCategories[$categoryIndex] ?? [];
+                $categoryColor = is_array($categoryData)
+                    ? ($categoryData['color'] ?? '')
+                    : '';
 
-                        <div class="chart-reference-legend-content">
-                            <span class="chart-reference-legend-name">
-                                <?= htmlspecialchars($categoryName, ENT_QUOTES, 'UTF-8') ?>
-                            </span>
+                // Če konfiguracija ne vsebuje barve, ne izmišljamo nove.
+                $categoryColor = is_string($categoryColor) &&
+                    preg_match('/^#[0-9a-fA-F]{3,8}$/', $categoryColor)
+                    ? $categoryColor
+                    : '';
+                ?>
 
-                            <span class="chart-reference-legend-description">
-                                <?= htmlspecialchars($categoryDescription, ENT_QUOTES, 'UTF-8') ?>
-                            </span>
-                        </div>
+                <div class="chart-reference-legend-row">
+                    <span
+                        class="chart-reference-legend-color"
+                        aria-hidden="true"
+                        <?= $categoryColor !== ''
+                            ? 'style="background-color: ' .
+                              htmlspecialchars($categoryColor, ENT_QUOTES, 'UTF-8') .
+                              '"'
+                            : '' ?>
+                    ></span>
+
+                    <div class="chart-reference-legend-content">
+                        <span class="chart-reference-legend-name">
+                            <?= htmlspecialchars($categoryName, ENT_QUOTES, 'UTF-8') ?>
+                        </span>
+
+                        <span class="chart-reference-legend-description">
+                            <?= htmlspecialchars($categoryDescription, ENT_QUOTES, 'UTF-8') ?>
+                        </span>
                     </div>
+                </div>
 
-                <?php endforeach; ?>
+            <?php endforeach; ?>
+        </div>
+
+    </div>
+
+    <div class="current-air-info-column">
+
+        <div class="pollutant-info-list">
+
+            <div class="pollutant-info-row">
+                <strong>PM2.5</strong>
+                <span>Zelo drobni delci iz prometa, kurjenja in drugih virov, ki prodrejo globoko v pljuča, lahko prehajajo v krvni obtok ter prispevajo k vnetjem in boleznim srca in ožilja.</span>
             </div>
 
-        </section>
+            <div class="pollutant-info-row">
+                <strong>PM10</strong>
+                <span>Večji delci iz cestnega prahu, prometa in kurjenja, ki dražijo dihala, povzročajo vnetne odzive in poslabšujejo bolezni dihal.</span>
+            </div>
+
+            <div class="pollutant-info-row">
+                <strong>O₃</strong>
+                <span>Prizemni ozon, ki nastaja ob sončni svetlobi iz drugih onesnaževal ter povzroča vnetje dihalnih poti, otežuje dihanje in poslabšuje astmo.</span>
+            </div>
+
+            <div class="pollutant-info-row">
+                <strong>NO₂</strong>
+                <span>Plin predvsem iz prometa in drugih procesov zgorevanja, ki povzroča vnetje dihalnih poti, poslabšuje astmo in prispeva k nastajanju prizemnega ozona.</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
 
         <!-- ARHIV MERITEV -->
 
@@ -526,6 +564,14 @@ $chartReferencesJson = encode_page_json($chartReferences);
                         aria-pressed="false"
                     >
                         180 DNI
+                    </button>
+
+                    <button
+                        type="button"
+                        data-days="360"
+                        aria-pressed="false"
+                    >
+                        360 DNI
                     </button>
 
                 </div>

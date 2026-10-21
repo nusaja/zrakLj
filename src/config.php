@@ -34,7 +34,7 @@ const AIR_STATIONS = [
 
 const LJUBLJANA_STATIONS = AIR_STATIONS;
 
-$AREA_TO_STATION = [
+const AREA_TO_STATION = [
     'bezigrad' => 'LJ Bežigrad',
     'sis'      => 'LJ Celovška',
     'vic'      => 'LJ Vič'
@@ -103,27 +103,27 @@ const EU_AQI_THRESHOLDS = [
 const EU_AQI_CATEGORIES = [
     [
         'label' => 'Dobro',
-        'color' => '#B8DCC5'
+        'color' => '#8CCDA8'
     ],
     [
         'label' => 'Zadovoljivo',
-        'color' => '#E5E2DC'
+        'color' => '#ADADAD'
     ],
     [
         'label' => 'Zmerno',
-        'color' => '#F3E3B5'
+        'color' => '#F1CE75'
     ],
     [
         'label' => 'Slabo',
-        'color' => '#E8AC9C'
+        'color' => '#E99679'
     ],
     [
         'label' => 'Zelo slabo',
-        'color' => '#E8AC9C'
+        'color' => '#E99679'
     ],
     [
         'label' => 'Izredno slabo',
-        'color' => '#E8AC9C'
+        'color' => '#E99679'
     ]
 ];
 
