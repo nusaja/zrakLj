@@ -196,6 +196,7 @@ a {
   border-radius: 0;
   background: transparent;
   color: var(--ink);
+  flex-shrink: 0;
 }
 
 .geo-icon-button:hover {
@@ -1312,7 +1313,7 @@ a {
 
 .current-measurement-toolbar {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: flex-end;
     gap: 24px;
 }
@@ -1323,7 +1324,7 @@ a {
 
 .current-measurement-toolbar .geo-icon-button {
     flex: 0 0 43px;
-    margin: 0 0 0 auto;
+    margin: 0;
 }
 
 .current-air-legend {
@@ -1364,14 +1365,20 @@ a {
 
 .geo-selected-label {
     margin-left: auto;
-    margin-right: -8px;
+    min-width: 0;
     font: 600 11px 'Roboto Mono', monospace;
     letter-spacing: 0.02em;
-    white-space: nowrap;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    text-align: right;
 }
 
 .geo-selected-label[hidden] {
     display: none;
+}
+
+.current-measurement-toolbar .geo-selected-label[hidden] + .geo-icon-button {
+    margin-left: auto;
 }
 
 /* Označena ajbližja postaja */
@@ -1383,10 +1390,6 @@ a {
 
 
 /* Oznaka in gumb drug ob drugem */
-
-.current-measurement-toolbar .geo-icon-button {
-    margin-left: 0;
-}
 
 @keyframes nearestReveal {
     0%, 100% {
@@ -1526,4 +1529,11 @@ a {
     .current-air-info .pollutant-info-list {
         display: contents;
     }
+}
+
+.measurement-time {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 10px;
+    white-space: nowrap;
 }

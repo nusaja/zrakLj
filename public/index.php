@@ -287,31 +287,29 @@ $chartReferencesJson = encode_page_json($chartReferences);
                         $measurementTo !== null
                     ): ?>
 
-                        <div class="measurement-period">
+                       <div class="measurement-period">
 
-                            <span class="measurement-period-label">
-                                OD
+                            <span class="measurement-time">
+                                <span class="measurement-period-label">OD</span>
+                                <strong>
+                                    <?= htmlspecialchars(
+                                        $measurementFrom,
+                                        ENT_QUOTES,
+                                        'UTF-8'
+                                    ) ?>
+                                </strong>
                             </span>
 
-                            <strong>
-                                <?= htmlspecialchars(
-                                    $measurementFrom,
-                                    ENT_QUOTES,
-                                    'UTF-8'
-                                ) ?>
-                            </strong>
-
-                            <span class="measurement-period-label">
-                                DO
+                            <span class="measurement-time">
+                                <span class="measurement-period-label">DO</span>
+                                <strong>
+                                    <?= htmlspecialchars(
+                                        $measurementTo,
+                                        ENT_QUOTES,
+                                        'UTF-8'
+                                    ) ?>
+                                </strong>
                             </span>
-
-                            <strong>
-                                <?= htmlspecialchars(
-                                    $measurementTo,
-                                    ENT_QUOTES,
-                                    'UTF-8'
-                                ) ?>
-                            </strong>
 
                         </div>
 
