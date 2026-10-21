@@ -142,14 +142,14 @@
                     target="_blank"
                     rel="noopener noreferrer"
                 >
-                    ODDAJ POBUDO ↗
+                    ODDAJ POBUDO NA STRANI MOL ↗
                 </a>
 
                 <a
                     class="solutions-action solutions-action-secondary"
                     href="mailto:glavna.pisarna@ljubljana.si?subject=Kakovost%20zraka%20v%20Ljubljani"
                 >
-                    POŠLJI E-POŠTO ↗
+                    POŠLJI E-POŠTO NA GLAVNO PISARNO MOL ↗
                 </a>
             </div>
 

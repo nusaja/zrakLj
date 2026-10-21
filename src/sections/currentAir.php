@@ -8,7 +8,7 @@ $pollutantLabels = [
 ];
 $escapeAir = static fn ($value): string => htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
-foreach ($AREA_TO_STATION as $areaKey => $stationName):
+foreach (AREA_TO_STATION as $areaKey => $stationName):
     $station = $hourly_data[$stationName] ?? null;
     $values = $station['values'] ?? [];
     $quality = $station['quality'] ?? getAirQualityCategory($values);

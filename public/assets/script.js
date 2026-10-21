@@ -107,78 +107,130 @@ function markNearestStation(area) {
   return found;
 }
 
+
 function tryGeolocate() {
-  const button = document.getElementById('geolocate');
-  const label = document.getElementById('geo-selected-label');
+    const button = document.getElementById('geolocate');
+    const label = document.getElementById('geo-selected-label');
 
-  const showStatus = text => {
-      if (label) {
-          label.textContent = text;
-          label.hidden = false;
-      }
-  };
+    const MAX_ACCURACY = 1000; // metri
+    const MAX_WAIT = 10000;    // 10 sekund
 
-  if (!navigator.geolocation) {
-      showStatus('GEOLOKACIJA NI PODPRTA');
-      return;
-  }
+    const showStatus = text => {
+        if (label) {
+            label.textContent = text;
+            label.hidden = false;
+        }
+    };
 
-  if (!window.isSecureContext) {
-      showStatus('GEOLOKACIJA ZAHTEVA HTTPS');
-      return;
-  }
+    // Odstrani oznako prejšnje geolokacije.
+    document.querySelectorAll('.station-card[data-area]')
+        .forEach(card => card.classList.remove('is-nearest'));
 
-  if (button) {
-      button.disabled = true;
-  }
+    if (!navigator.geolocation) {
+        showStatus('GEOLOKACIJA NI PODPRTA');
+        return;
+    }
 
-  showStatus('PRIDOBIVAM LOKACIJO ...');
+    if (!window.isSecureContext) {
+        showStatus('GEOLOKACIJA ZAHTEVA HTTPS');
+        return;
+    }
 
-  navigator.geolocation.getCurrentPosition(
-      position => {
-          const nearestArea = findNearestStation(
-              position.coords.latitude,
-              position.coords.longitude
-          );
+    if (button) {
+        button.disabled = true;
+    }
 
-          const found = markNearestStation(nearestArea);
+    showStatus('PRIDOBIVAM LOKACIJO ...');
 
-          if (!found) {
-              showStatus('POSTAJE NI MOGOČE OZNAČITI');
-              console.warn(
-                  'Preveri data-area na karticah:',
-                  nearestArea
-              );
-          }
+    let watchId = null;
+    let finished = false;
 
-          if (button) {
-              button.disabled = false;
-          }
-      },
+    const finish = message => {
+        if (finished) return;
 
-      error => {
-          const messages = {
-              1: 'DOSTOP DO LOKACIJE NI DOVOLJEN',
-              2: 'LOKACIJA NI NA VOLJO',
-              3: 'PRIDOBIVANJE LOKACIJE JE POTEKLO'
-          };
+        finished = true;
+        clearTimeout(timer);
 
-          showStatus(
-              messages[error.code] || 'NAPAKA GEOLOKACIJE'
-          );
+        if (watchId !== null) {
+            navigator.geolocation.clearWatch(watchId);
+        }
 
-          if (button) {
-              button.disabled = false;
-          }
-      },
+        if (button) {
+            button.disabled = false;
+        }
 
-      {
-          enableHighAccuracy: false,
-          timeout: 10000,
-          maximumAge: 300000
-      }
-  );
+        if (message) {
+            showStatus(message);
+        }
+    };
+
+    const timer = setTimeout(() => {
+        finish('VAŠA NAPRAVA NE MORE NATANČNO DOLOČITI LOKACIJE');
+    }, MAX_WAIT);
+
+    watchId = navigator.geolocation.watchPosition(
+        position => {
+            if (finished) return;
+
+            const { latitude, longitude, accuracy } = position.coords;
+
+            // Ne uporabljaj nenatančnih koordinat.
+            if (
+                !Number.isFinite(latitude) ||
+                !Number.isFinite(longitude) ||
+                !Number.isFinite(accuracy) ||
+                accuracy > MAX_ACCURACY
+            ) {
+                showStatus('PRIDOBIVAM LOKACIJO ...');
+                return;
+            }
+
+            const nearestArea = findNearestStation(
+                latitude,
+                longitude
+            );
+
+            const found = markNearestStation(nearestArea);
+
+            finish(
+                found
+                    ? null
+                    : 'POSTAJE NI MOGOČE OZNAČITI'
+            );
+        },
+
+        error => {
+            if (finished) return;
+
+            const messages = {
+                1: 'DOSTOP DO LOKACIJE NI DOVOLJEN',
+                2: 'LOKACIJA NI NA VOLJO',
+                3: 'PRIDOBIVANJE LOKACIJE JE POTEKLO'
+            };
+
+            // Ob začasni napaki počakaj do skupne omejitve.
+            if (error.code === 2 || error.code === 3) {
+                showStatus('PRIDOBIVAM LOKACIJO ...');
+                return;
+            }
+
+            finish(messages[error.code] || 'NAPAKA GEOLOKACIJE');
+        },
+
+        {
+            enableHighAccuracy: true,
+            timeout: 15000,
+            maximumAge: 0
+        }
+    );
+
+    // Če je bila lokacija vrnjena zelo hitro,
+    // prepreči, da bi spremljanje ostalo aktivno.
+    if (finished && watchId !== null) {
+        navigator.geolocation.clearWatch(watchId);
+    }
 }
+
 
 function initializeStationSelection() {
   const geoButton = document.getElementById('geolocate');
@@ -453,22 +505,22 @@ function createReferenceDescription(reference) {
           {
               indices: [0],
               name: 'DOBRO',
-              description: 'Nizka onesnaženost zraka.'
+              description: 'Nizka onesnaženost zraka. Običajne aktivnosti na prostem.'
           },
           {
               indices: [1],
               name: 'ZADOVOLJIVO',
-              description: 'Sprejemljiva onesnaženost zraka.'
+              description: 'Sprejemljiva onesnaženost zraka. Običajne aktivnosti na prostem.'
           },
           {
               indices: [2],
               name: 'ZMERNO',
-              description: 'Povečana onesnaženost zraka.'
+              description: 'Povečana onesnaženost zraka. Odsvetovana intenzivna vadba na prostem za občutljive skupine.'
           },
           {
               indices: [3, 4, 5],
               name: 'SLABO / ZELO SLABO / IZREDNO SLABO',
-              description: 'Visoka do izredno visoka onesnaženost zraka.'
+              description: 'Visoka do izredno visoka onesnaženost zraka. Odsvetovana intenzivna vadba na prostem.'
           }
       ];
 
@@ -508,12 +560,12 @@ function createReferenceDescription(reference) {
   }
 
   addParagraph(
-      `ZDRAVSTVENA SMERNICA WHO — ${reference.label}`,
+      `ZDRAVSTVENA SMERNICA WHO: ${reference.label}`,
       true
   );
 
   addParagraph(
-      `Črtkana črta predstavlja kratkoročno smernico WHO: ` +
+      `Črtkana črta predstavlja 24-urno zdravstveno smernico WHO: ` +
       `${reference.value} µg/m³.`
   );
 
@@ -622,12 +674,12 @@ function initializeChartReferenceInfo() {
 
         if (isHourly) {
             label.textContent =
-                'BARVNA OBMOČJA — KATEGORIJE EEA';
+                'BARVNA OBMOČJA: KATEGORIJE EEA';
         } else {
             label.textContent =
                 reference.source === 'legacy'
-                    ? 'ČRTKANA ČRTA — STAREJŠA SMERNICA WHO'
-                    : 'ČRTKANA ČRTA — ZDRAVSTVENA SMERNICA WHO';
+                    ? 'ČRTKANA ČRTA: STAREJŠA SMERNICA WHO'
+                    : 'ČRTKANA ČRTA: ZDRAVSTVENA SMERNICA WHO';
         }
 
         description.replaceChildren(
@@ -696,7 +748,7 @@ function createChartReferencePlugin(getReference) {
                         const top = y.getPixelForValue(upper);
                         const bottom = y.getPixelForValue(lower);
 
-                        ctx.globalAlpha = 0.15;
+                        ctx.globalAlpha = 0.25;
                         ctx.fillStyle = category.color;
 
                         ctx.fillRect(
@@ -846,7 +898,7 @@ function initializeHistoryChart() {
             return dateString;
         }
 
-        return Number(parts[2]) + '. ' +
+        return Number(parts[2]) + '.' +
             Number(parts[1]) + '.';
     }
 
@@ -1136,7 +1188,13 @@ function initializeHistoryChart() {
                                 const [ymd, time] = date.split(' ');
                                 const [year, month, day] = ymd.split('-');
 
-                                return `${day}. ${month}. ${year} · ${time}`;
+                                const startHour = Number(time.slice(0, 2));
+                                const endHour = (startHour + 1) % 24;
+
+                                const from = `${String(startHour).padStart(2, '0')}:00`;
+                                const to = `${String(endHour).padStart(2, '0')}:00`;
+
+                                return `${day}. ${month}. ${year} · ${from}–${to}`;
                             }
 
                             return date;
@@ -1160,7 +1218,25 @@ function initializeHistoryChart() {
             scales: {
                 x: {
                     grid: {
-                        display: false
+                        display: true,
+                        color: context => {
+                            const index = context.index;
+
+                            // Pri daljših obdobjih skrij navpične mrežne črte.
+                            if (selectedDays >= 90) {
+                                return 'transparent';
+                            }
+
+                            // Črta samo pri dejanski meritvi.
+                            const hasMeasurement = context.chart.data.datasets.some(
+                                dataset => Number.isFinite(dataset.data[index])
+                            );
+
+                            return hasMeasurement
+                                ? 'rgba(0, 0, 0, 0.16)'
+                                : 'transparent';
+                        },
+                        drawTicks: false
                     },
 
                     ticks: {
@@ -1192,22 +1268,29 @@ function initializeHistoryChart() {
 
                             if (selectedDays >= 90) {
                                 const months = [
-                                    'JANUAR', 'FEBRUAR', 'MAREC',
-                                    'APRIL', 'MAJ', 'JUNIJ',
-                                    'JULIJ', 'AVGUST', 'SEPTEMBER',
-                                    'OKTOBER', 'NOVEMBER', 'DECEMBER'
+                                    'JAN', 'FEB', 'MAR',
+                                    'APR', 'MAJ', 'JUN',
+                                    'JUL', 'AVG', 'SEP',
+                                    'OKT', 'NOV', 'DEC'
                                 ];
 
-                                const previousDate = index > 0
-                                    ? dates[index - 1]
-                                    : null;
+                                const monthStart = dates.findIndex(date =>
+                                    Number(date.slice(5, 7)) === month &&
+                                    Number(date.slice(0, 4)) === year
+                                );
 
-                                const previousMonth = previousDate
-                                    ? Number(previousDate.split('-')[1])
-                                    : null;
+                                let monthEnd = monthStart;
 
-                                return index === 0 ||
-                                    month !== previousMonth
+                                while (
+                                    monthEnd + 1 < dates.length &&
+                                    dates[monthEnd + 1].slice(0, 7) === dateString.slice(0, 7)
+                                ) {
+                                    monthEnd++;
+                                }
+
+                                const middleIndex = Math.floor((monthStart + monthEnd) / 2);
+
+                                return index === middleIndex
                                     ? months[month - 1]
                                     : '';
                             }
@@ -1349,8 +1432,8 @@ function initializeHistoryChart() {
                 chartNote.textContent =
                     'VIR MERITEV: ARSO. ' +
                     'Prikazana obdobja povprečenja so: ' +
-                    'PM2.5 in PM10 — 24-urno povprečje; ' +
-                    'O₃ — največje povprečje 8-urnega obdobja v enem dnevu.' ;
+                    'PM2.5 in PM10: 24-urno povprečje; ' +
+                    'O₃: največje povprečje 8-urnega intervala v enem dnevu.' ;
             }
         }
 
@@ -1380,7 +1463,7 @@ function initializeHistoryChart() {
                 ? '24h'
                 : Number(button.dataset.days);
 
-            if (!['24h', 7, 14, 30, 90, 180].includes(days)) {
+            if (!['24h', 7, 14, 30, 90, 180, 360].includes(days)) {
                 return;
             }
 
