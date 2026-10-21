@@ -76,10 +76,10 @@ if ($annualJson === false) {
         Na zdravje v veliki meri vpliva tudi dolgotrajno vdihavanje
         onesnaženega zraka dan za dnem, mesece in leta.
         <br><br>
-        Zato so zgovorna tudi letna povprečja
-        koncentracij, ki jih tukaj primerjamo
-        z zdravstvenimi smernicami Svetovne
-        zdravstvene organizacije (WHO).
+        Zato so zgovorna tudi letna povprečja koncentracij, 
+        ki jih tukaj primerjamo z zakonskimi letnimi mejnimi vrednostmi EU, 
+        veljavnimi tudi v Sloveniji, novimi strožjimi mejnimi vrednostmi, 
+        ki bodo veljale od leta 2030, ter zdravstvenimi smernicami Svetovne zdravstvene organizacije (WHO).
     </p>
 
     <div class="chart-controls">
@@ -108,7 +108,7 @@ if ($annualJson === false) {
     </div>
 
     <p class="long-term-period">
-        LETO 2025 · LETNA POVPREČJA
+        LETNA POVPREČJA V LETU 2025
     </p>
 
     <div
@@ -137,11 +137,6 @@ if ($annualJson === false) {
         koledarskih dni. Zaradi zaokroževanja in
         morebitnih manjkajočih meritev se lahko
         razlikujejo od uradnih letnih povprečij.
-        Primerjava vključuje zakonske letne mejne
-        vrednosti EU, veljavne leta 2025, nove
-        mejne vrednosti EU, ki jih je treba doseči
-        do leta 2030, ter veljavne zdravstvene smernice
-        WHO.
     </p>
 
     <script
@@ -210,9 +205,9 @@ document.addEventListener('DOMContentLoaded', () => {
             ]
             : [
                 ...stationEntries.map(([name]) => name),
-                'MEJNA VREDNOST EU 2025',
-                'MEJNA VREDNOST EU 2030',
-                'SMERNICA WHO'
+                'EU/SI 2025',
+                'EU/SI 2030',
+                'WHO'
             ],
 
             values: [
@@ -223,10 +218,10 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
 
             colors: [
-                ...stationEntries.map(() => '#8ABAD1'),
+                ...stationEntries.map(() => '#F1CE75'),
                 '#292929',
                 '#888888',
-                '#B7D9C4'
+                '#8CCDA8'
             ],
 
             stationCount: stationEntries.length

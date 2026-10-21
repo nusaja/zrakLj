@@ -748,7 +748,7 @@ function createChartReferencePlugin(getReference) {
                         const top = y.getPixelForValue(upper);
                         const bottom = y.getPixelForValue(lower);
 
-                        ctx.globalAlpha = 0.15;
+                        ctx.globalAlpha = 0.25;
                         ctx.fillStyle = category.color;
 
                         ctx.fillRect(
