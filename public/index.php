@@ -255,19 +255,19 @@ $chartReferencesJson = encode_page_json($chartReferences);
             aria-label="Vsebina"
         >
             <a href="#trenutno">
-                01 - TRENUTNO STANJE
+                01 / TRENUTNO STANJE
             </a>
 
             <a href="#grafi">
-                02 - ARHIV MERITEV
+                02 / ARHIV MERITEV
             </a>
 
             <a href="#dolgorocno">
-                03 - DOLGOROČNO STANJE
+                03 / DOLGOROČNO STANJE
             </a>
 
             <a href="#izboljsave">
-                04 - IZBOLJŠAVE
+                04 / IZBOLJŠAVE
             </a>
         </nav>
 
