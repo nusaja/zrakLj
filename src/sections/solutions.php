@@ -2,8 +2,8 @@
 <div class="solutions-content">
     <p class="solutions-intro">
         Ljubljana leži v kotlini, kjer je prevetrenost pogosto slaba,
-        zlasti ob temperaturnih inverzijah. Če želimo čistejši
-        zrak, mora biti upravljanje mesta podrejeno naravnim dejstvom.
+        zlasti ob temperaturnih inverzijah. Če si želimo čistejšega
+        zraka, mora biti upravljanje mesta podrejeno naravnim dejstvom.
         Ljubljana si zaradi svoje geografske lege ne more privoščiti
         enakega pristopa k onesnaževanju kot mesta z ugodnejšimi pogoji - potrebuje učinkovitejše ukrepe.
     </p>

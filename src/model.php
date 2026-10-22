@@ -30,18 +30,42 @@ function get_arso_data(string $url): ?SimpleXMLElement
     return $xml;
 }
 
-/** Vrne veljavno nenegativno število ali null. */
-function parse_air_number($raw): ?float
+/** Vrne nenegativno številčno vrednost za izračune ali null. */
+function parse_air_number(mixed $raw): ?float
 {
     if ($raw === null) {
         return null;
     }
+
     $text = str_replace(',', '.', trim((string) $raw));
+
+    if (preg_match('/^[<>]\s*(\d+(?:\.\d+)?)$/', $text, $matches)) {
+        $text = $matches[1];
+    }
+
     if ($text === '' || !is_numeric($text)) {
         return null;
     }
+
     $number = (float) $text;
+
     return is_finite($number) && $number >= 0 ? $number : null;
+}
+
+/** Vrne veljavno meritev z ohranjenim znakom < ali >. */
+function parse_air_value(mixed $raw): float|string|null
+{
+    if ($raw === null) {
+        return null;
+    }
+
+    $text = str_replace(',', '.', trim((string) $raw));
+
+    if (preg_match('/^([<>])\s*(\d+(?:\.\d+)?)$/', $text, $matches)) {
+        return $matches[1] . $matches[2];
+    }
+
+    return parse_air_number($text);
 }
 
 function get_xml_number(SimpleXMLElement $station, string $element): ?float
@@ -62,8 +86,10 @@ function read_station_values(SimpleXMLElement $station, string $type = 'hourly')
 {
     $values = [];
     foreach (get_pollutant_fields($type) as $name => $field) {
-        $values[$name] = get_xml_number($station, $field);
-    }
+        $values[$name] = isset($station->{$field})
+        ? parse_air_value($station->{$field})
+        : null;
+        }
     return $values;
 }
 
@@ -234,11 +260,11 @@ function get_hourly_history(): array
             }
 
             $history[$date][$station] = [
-                'PM2.5' => parse_air_number($row[2] ?? null),
-                'PM10' => parse_air_number($row[3] ?? null),
-                'OZON' => parse_air_number($row[4] ?? null),
-                'SO2' => parse_air_number($row[5] ?? null),
-                'NO2' => parse_air_number($row[6] ?? null),
+                'PM2.5' => parse_air_value($row[2] ?? null),
+                'PM10' => parse_air_value($row[3] ?? null),
+                'OZON' => parse_air_value($row[4] ?? null),
+                'SO2' => parse_air_value($row[5] ?? null),
+                'NO2' => parse_air_value($row[6] ?? null),
             ];
 
             if ($latest === null || $date > $latest) {
@@ -379,8 +405,8 @@ function get_daily_history(int $days = 30): array
             }
             $values = [];
             foreach ($pollutants as $i => $pollutant) {
-                $values[$pollutant] = parse_air_number($row[$i + 3] ?? null);
-            }
+                    $values[$pollutant] = parse_air_value($row[$i + 3] ?? null);
+                }
             $history[$dateString][$station] = $values;
         }
     } finally {

@@ -975,15 +975,15 @@ function initializeHistoryChart() {
 
         const raw = source[date]?.[station]?.[pollutant];
 
-        if (
-            raw === null ||
-            raw === undefined ||
-            raw === ''
-        ) {
+        if (raw === null || raw === undefined || raw === '') {
             return null;
         }
 
-        const value = Number(raw);
+        const text = String(raw).trim().replace(',', '.');
+
+        const match = text.match(/^([<>])\s*(\d+(?:\.\d+)?)$/);
+
+        const value = Number(match ? match[2] : text);
 
         if (!Number.isFinite(value) || value < 0) {
             return null;
@@ -1202,13 +1202,25 @@ function initializeHistoryChart() {
 
                         label(context) {
                             if (context.parsed.y === null) {
-                                return context.dataset.label +
-                                    ': ni podatka';
+                                return context.dataset.label + ': ni podatka';
                             }
+
+                            const dates = getChartDates();
+                            const date = dates[context.dataIndex];
+
+                            const source = selectedDays === '24h'
+                                ? hourlyHistory
+                                : history;
+
+                            const raw = source[date]?.[context.dataset.label]?.[pollutantSelect.value];
+
+                            const displayValue = raw === null || raw === undefined
+                                ? context.parsed.y
+                                : String(raw).trim();
 
                             return context.dataset.label +
                                 ': ' +
-                                context.parsed.y +
+                                displayValue +
                                 ' µg/m³';
                         }
                     }

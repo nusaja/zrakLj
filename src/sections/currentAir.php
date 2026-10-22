@@ -63,9 +63,13 @@ foreach (AREA_TO_STATION as $areaKey => $stationName):
             </span>
 
             <strong>
-                <?= $value === null
-                    ? 'n.p.'
-                    : $escapeAir(number_format((float) $value, 1, ',', '')) ?>
+                <?php if ($value === null): ?>
+                    n.p.
+                <?php elseif (is_string($value)): ?>
+                    <?= $escapeAir($value) ?>
+                <?php else: ?>
+                    <?= $escapeAir(number_format($value, 1, ',', '')) ?>
+                <?php endif; ?>
             </strong>
         </div>
     <?php endforeach; ?>
