@@ -1141,8 +1141,12 @@ a {
   }
 
   .content-section {
-    padding-block: 45px 60px;
+    padding-block: 28px 60px;
   }
+
+  .section-title h2 {
+    font-size: 30px;
+}
 
   .chart-wrap {
     min-height: 300px;
@@ -1333,9 +1337,6 @@ a {
 }
 
 @media (max-width: 700px) {
-    #trenutno-title {
-        font-size: 26px;
-    }
     .current-measurement-toolbar {
         gap: 12px;
     }
@@ -1467,7 +1468,7 @@ a {
     font-weight: 700;
 }
 
-.pollutant-info-row span {
+.current-air-info .pollutant-info-row span {
     color: var(--muted);
     font-family: 'DM Sans', sans-serif;
     font-size: 12px;

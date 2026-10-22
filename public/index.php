@@ -238,7 +238,7 @@ $chartReferencesJson = encode_page_json($chartReferences);
             aria-labelledby="main-title"
         >
             <span class="eyebrow">
-                NEODVISEN PREGLED KVALITETE ZRAKA
+                NEODVISEN PREGLED KAKOVOSTI ZRAKA
             </span>
 
             <h1 id="main-title">
