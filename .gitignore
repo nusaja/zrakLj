@@ -2,6 +2,7 @@
 src/data/*History.csv
 src/data/*History-backup.csv
 src/data/*.db
+src/data/*History.*.csv
 
 # Logs
 logs/
