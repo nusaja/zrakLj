@@ -71,6 +71,20 @@ Sta izključeni iz Gita z `.gitignore`.
 
 **Nikoli ju ne prepisuj z lokalnima datotekama pri običajnem deploymentu.**
 
+
+Prenesi najnovejši CSV datoteki iz strežnika v lokalni projekt. 
+
+
+```bash
+scp root@185.187.170.83:/var/www/html/zrakLj-new/src/data/hourlyHistory.csv src/data/
+```
+
+```bash
+scp root@185.187.170.83:/var/www/html/zrakLj-new/src/data/dailyHistory.csv src/data/
+```
+
+
+
 ## 5. Cron jobi
 
 Pregled:

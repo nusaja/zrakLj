@@ -129,14 +129,14 @@ if ($annualJson === false) {
     ></p>
 
     <p class="source-note">
-        <strong>VIR MERITEV: ARSO</strong>
-        <br>
         Prikazana letna povprečja so informativni
         izračuni na podlagi mesečnih povprečnih
         koncentracij ARSO za leto 2025, uteženih s številom
         koledarskih dni. Zaradi zaokroževanja in
         morebitnih manjkajočih meritev se lahko
         razlikujejo od uradnih letnih povprečij.
+        <br>
+        VIR MERITEV: ARSO
     </p>
 
     <script

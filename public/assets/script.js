@@ -1231,23 +1231,9 @@ function initializeHistoryChart() {
                 x: {
                     grid: {
                         display: true,
-                        color: context => {
-                            const index = context.index;
-
-                            // Pri daljših obdobjih skrij navpične mrežne črte.
-                            if (selectedDays >= 90) {
-                                return 'transparent';
-                            }
-
-                            // Črta samo pri dejanski meritvi.
-                            const hasMeasurement = context.chart.data.datasets.some(
-                                dataset => Number.isFinite(dataset.data[index])
-                            );
-
-                            return hasMeasurement
-                                ? 'rgba(0, 0, 0, 0.16)'
-                                : 'transparent';
-                        },
+                        color: () => selectedDays >= 90
+                            ? 'transparent'
+                            : 'rgba(0, 0, 0, 0.16)',
                         drawTicks: false
                     },
 
@@ -1265,11 +1251,10 @@ function initializeHistoryChart() {
                             }
 
                             if (selectedDays === '24h') {
-                                const hour = Number(
-                                    dateString.slice(11, 13)
-                                );
+                                const hour = Number(dateString.slice(11, 13));
+                                const interval = window.innerWidth <= 600 ? 4 : 3;
 
-                                return hour % 3 === 0
+                                return hour % interval === 0
                                     ? `${String(hour).padStart(2, '0')}:00`
                                     : '';
                             }
@@ -1302,6 +1287,30 @@ function initializeHistoryChart() {
 
                                 const middleIndex = Math.floor((monthStart + monthEnd) / 2);
 
+                                if (selectedDays === 360 && window.innerWidth <= 600) {
+                                    // Poiščemo prvi celoten mesec v prikazanem obdobju.
+                                    const firstDate = dates[0];
+                                    const firstMonthIsComplete = firstDate.slice(8, 10) === '01';
+
+                                    const firstFullMonth = firstMonthIsComplete
+                                        ? firstDate.slice(0, 7)
+                                        : dates.find(date => date.slice(8, 10) === '01')?.slice(0, 7);
+
+                                    if (!firstFullMonth) {
+                                        return '';
+                                    }
+
+                                    const firstYear = Number(firstFullMonth.slice(0, 4));
+                                    const firstMonth = Number(firstFullMonth.slice(5, 7));
+
+                                    const monthsSinceFirst =
+                                        (year - firstYear) * 12 + (month - firstMonth);
+
+                                    return index === middleIndex && monthsSinceFirst % 2 === 0
+                                        ? months[month - 1]
+                                        : '';
+                                }
+
                                 return index === middleIndex
                                     ? months[month - 1]
                                     : '';
@@ -1314,13 +1323,20 @@ function initializeHistoryChart() {
                             ).getDay();
 
                             if (selectedDays === 30 && window.innerWidth <= 600) {
-                              return index % 5 === 0
-                                  ? formatDate(dateString)
-                                  : '';
-                          }
+                                return weekday === 3
+                                    ? formatDate(dateString)
+                                    : '';
+                            }
 
-                          if (weekday === 6) return 'SOB';
-                          if (weekday === 0) return 'NED';
+                            if (selectedDays === 14 && window.innerWidth <= 600) {
+                                if (weekday === 0) return 'NED';
+                                if (weekday === 3) return formatDate(dateString);
+                                return '';
+                            }
+
+                            if (weekday === 6) return 'SOB';
+                            if (weekday === 0) return 'NED';
+                            
 
                           if (selectedDays === 7) {
                               return formatDate(dateString);
@@ -1336,8 +1352,8 @@ function initializeHistoryChart() {
                         color: '#555555',
 
                         font: {
-                            family: 'Roboto Mono, monospace',
-                            size: 10
+                            family: 'Roboto, monospace',
+                            size: 11
                         }
                     }
                 },
