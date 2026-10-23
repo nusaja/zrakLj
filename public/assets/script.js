@@ -1218,11 +1218,17 @@ function initializeHistoryChart() {
                                 ? context.parsed.y
                                 : String(raw).trim();
 
+                            const formattedValue = typeof displayValue === 'number'
+                                || /^-?\d+(?:[.,]\d+)?$/.test(String(displayValue))
+                                    ? Number(String(displayValue).replace(',', '.'))
+                                        .toLocaleString('sl-SI', { maximumFractionDigits: 1 })
+                                    : displayValue;
+
                             return context.dataset.label +
                                 ': ' +
-                                displayValue +
+                                formattedValue +
                                 ' µg/m³';
-                        }
+                            }
                     }
                 }
             },
