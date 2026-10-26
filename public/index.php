@@ -365,10 +365,20 @@ $chartReferencesJson = encode_page_json($chartReferences);
             </div>
 
             <p class="source-note">
-                ● Označeno onesnaževalo ima najslabši rezultat
+                ● Označeno izmerjeno onesnaževalo ima na tej merilni postaji najslabši rezultat
                 in določa prikazano kategorijo evropskega indeksa kakovosti zraka (EEA), legenda prikazana spodaj.
+                <?php if (!empty($showEstimatedNote)): ?>
                 <br>
-                "n.p." pomeni, da podatek ne obstaja.
+                <span class="note-marker">*</span>Kategorijo EEA z zvezdico je določil informativni približek, 
+                izračunan na podlagi meritev drugih ljubljanskih postaj. Kadar meritev posameznega onesnaževala manjka, 
+                uporabimo razpoložljive meritve drugih ljubljanskih postaj oziroma njihovo povprečje. 
+                Dejanske koncentracije se lahko razlikujejo.<strong> Informativni približki so pomembni, 
+                saj to, da se posameznega onesnaževala ne meri, ne pomeni, da tega onesnaževala ni. 
+                Bolj verjetno je, da je le-to vsaj okvirno primerljivo z vrednostmi drugih merilnih postaj v Ljubljani,
+                kot pa da bi bilo odsotno.</strong>
+                <?php endif; ?>
+                <br>
+                "n.p." pomeni, da ARSO meritve ni objavil ali pa onesnaževala sploh ne meri.
                 <br>
                 VIR MERITEV: ARSO · µg/m³.
             </p>
