@@ -505,22 +505,22 @@ function createReferenceDescription(reference) {
           {
               indices: [0],
               name: 'DOBRO',
-              description: 'Nizka onesnaženost zraka. Običajne aktivnosti na prostem.'
+              description: 'Nizka onesnaženost zraka.'
           },
           {
               indices: [1],
               name: 'ZADOVOLJIVO',
-              description: 'Sprejemljiva onesnaženost zraka. Običajne aktivnosti na prostem.'
+              description: 'Sprejemljiva onesnaženost zraka.'
           },
           {
               indices: [2],
               name: 'ZMERNO',
-              description: 'Povečana onesnaženost zraka. Odsvetovana intenzivna vadba na prostem za občutljive skupine.'
+              description: 'Povečana onesnaženost zraka.'
           },
           {
               indices: [3, 4, 5],
               name: 'SLABO / ZELO SLABO / IZREDNO SLABO',
-              description: 'Visoka do izredno visoka onesnaženost zraka. Odsvetovana intenzivna vadba na prostem.'
+              description: 'Visoka do izredno visoka onesnaženost zraka.'
           }
       ];
 
@@ -565,9 +565,14 @@ function createReferenceDescription(reference) {
   );
 
   addParagraph(
-      `Črtkana črta predstavlja 24-urno zdravstveno smernico WHO: ` +
+      `Črtkana črta predstavlja 24-urno zdravstveno smernico WHO za ${reference.label}: ` +
       `${reference.value} µg/m³.`
   );
+
+
+    const line = document.createElement('hr');
+    line.className = 'who-divider';
+    fragment.appendChild(line);
 
   addParagraph(
     'Smernice WHO temeljijo na znanstvenih dokazih o škodljivih vplivih onesnaženega zraka na zdravje. ' 
@@ -582,7 +587,7 @@ function createReferenceDescription(reference) {
   );
 
   addParagraph(
-    'Nova EU zakonodaja Slovenijo zavezuje k uvedbi dnevne meje 25 µg/m³ za leto 2030, ki pa ostaja višja od zdravstvenega priporočila WHO (15 µg/m³).'
+    'Nova EU zakonodaja Slovenijo zavezuje k uvedbi PM2.5 dnevne meje 25 µg/m³ za leto 2030, ki pa ostaja višja od zdravstvenega priporočila WHO (15 µg/m³).'
   );
 
   return fragment;

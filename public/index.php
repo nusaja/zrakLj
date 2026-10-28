@@ -198,9 +198,14 @@ $chartReferencesJson = encode_page_json($chartReferences);
     <meta property="og:description"
         content="Kako kakovosten je zrak v Ljubljani? Preveri trenutne meritve, zgodovino onesnaženosti in dolgoročne trende.">
     <meta property="og:url" content="https://zraklj.si/">
+    <meta property="og:image" content="https://zraklj.si/assets/og-image.png">
+    <meta property="og:image:width" content="1201">
+    <meta property="og:image:height" content="625">
+    <meta property="og:image:alt" content="zrakLJ.si - Kakovost zraka v Ljubljani.">
 
     <!-- Social media -->
-    <meta name="twitter:card" content="summary">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://zraklj.si/assets/og-image.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
 
@@ -216,6 +221,23 @@ $chartReferencesJson = encode_page_json($chartReferences);
     >
 
     <link rel="stylesheet" href="/assets/style.css">
+
+    <!-- Matomo -->
+    <script>
+    var _paq = window._paq = window._paq || [];
+    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function() {
+        var u="//statistika.andree.si/";
+        _paq.push(['setTrackerUrl', u+'matomo.php']);
+        _paq.push(['setSiteId', '8']);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+    })();
+    </script>
+    <!-- End Matomo Code -->
+
 </head>
 
 <body>
@@ -369,8 +391,8 @@ $chartReferencesJson = encode_page_json($chartReferences);
                 in določa prikazano kategorijo evropskega indeksa kakovosti zraka (EEA), legenda prikazana spodaj.
                 <?php if (!empty($showEstimatedNote)): ?>
                 <br>
-                <span class="note-marker">*</span>Kategorijo EEA z zvezdico je določil informativni približek, 
-                izračunan na podlagi meritev drugih ljubljanskih postaj. Kadar meritev posameznega onesnaževala manjka, 
+                <span class="note-marker">*</span>Kategorijo EEA z zvezdico je določil informativni približek. 
+                Kadar meritev posameznega onesnaževala manjka, 
                 uporabimo razpoložljive meritve drugih ljubljanskih postaj oziroma njihovo povprečje. 
                 Dejanske koncentracije se lahko razlikujejo.<strong> Informativni približki so pomembni, 
                 saj to, da se posameznega onesnaževala ne meri, ne pomeni, da tega onesnaževala ni. 
@@ -380,17 +402,17 @@ $chartReferencesJson = encode_page_json($chartReferences);
                 <br>
                 "n.p." pomeni, da ARSO meritve ni objavil ali pa onesnaževala sploh ne meri.
                 <br>
-                VIR MERITEV: ARSO · µg/m³.
+                VIR MERITEV: ARSO · µg/m³. Meritve niso prikaz vsesplošne kvalitete zraka v Ljubljani. 
             </p>
 
             <?php
             // Barve prevzamemo iz iste EEA konfiguracije kot graf.
             $eeaLegendCategories = array_values(EU_AQI_CATEGORIES);
             $eeaLegendRows = [
-                [0, 'DOBRO', 'Nizka onesnaženost zraka. Običajne aktivnosti na prostem.'],
-                [1, 'ZADOVOLJIVO', 'Sprejemljiva onesnaženost zraka. Običajne aktivnosti na prostem.'],
-                [2, 'ZMERNO', 'Povečana onesnaženost zraka. Odsvetovana intenzivna vadba na prostem za občutljive skupine.'],
-                [3, 'SLABO / ZELO SLABO / IZREDNO SLABO', 'Visoka do izredno visoka onesnaženost zraka. Odsvetovana intenzivna vadba na prostem.'],
+                [0, 'DOBRO', 'Nizka onesnaženost zraka.'],
+                [1, 'ZADOVOLJIVO', 'Sprejemljiva onesnaženost zraka.'],
+                [2, 'ZMERNO', 'Povečana onesnaženost zraka.'],
+                [3, 'SLABO / ZELO SLABO / IZREDNO SLABO', 'Visoka do izredno visoka onesnaženost zraka.'],
             ];
             ?>
 
@@ -473,6 +495,23 @@ $chartReferencesJson = encode_page_json($chartReferences);
     </div>
 
 </div>
+ 
+<?php /*
+
+            <p class="health-disclaimer">
+                Čim manj ste izpostavljeni onesnaženemu zraku, tem bolje za zdravje. 
+                Zato kategorij ne interpretirajte kot strogo ločnico med »zdravim« in »nezdravim« zrakom. 
+                Tudi nižje koncentracije niso zdravju koristne, 
+                dolgoročni učinki pa se lahko razvijajo brez očitnih simptomov.
+                    <br>
+                Še posebej za športne aktivnosti je smiselno izbrati območja s čistejšim zrakom, tudi zunaj mesta, 
+                ali notranje prostore s filtriranim zrakom.
+                    <br>
+                Če je zunaj trenutno visoka koncentracija PM2.5, je bolje počakati 
+                s prezračevanjem notranjih prostorov. 
+            </p>
+*/ ?>
+
 
 </section>
 
@@ -707,7 +746,7 @@ $chartReferencesJson = encode_page_json($chartReferences);
 
     <div class="footer-sources">
         VIRI:
-        <a href="https://www.arso.gov.si/" target="_blank" rel="noopener noreferrer">ARSO</a>,
+        <a href="https://www.arso.gov.si/zrak/kakovost%20zraka/" target="_blank" rel="noopener noreferrer">ARSO</a>,
         <a href="https://airindex.eea.europa.eu/" target="_blank" rel="noopener noreferrer">EEA</a>,
         <a href="https://www.who.int/health-topics/air-pollution" target="_blank" rel="noopener noreferrer">WHO</a>
     </div>

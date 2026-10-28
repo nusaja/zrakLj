@@ -55,6 +55,15 @@
             ob temperaturnih inverzijah, npr. omejitve najbolj onesnažujočega prometa.',
             'tags' => 'IZREDNI UKREPI / PM2.5 / NO₂',
         ],
+        [
+            'icon' => 'monitoring',
+            'title' => 'BOLJŠE SPREMLJANJE KAKOVOSTI ZRAKA',
+            'source' => 'https://focus.si/onesnazenost-zraka-zaradi-prometa-visoka-merilnih-mest-pa-premalo/',
+            'description' => 'MOL ima (oz. vodi podatke za) le eno merilno mesto. Koristna bi bila razširitev mreže v raznolika okolja za boljšo pokritost,
+            tako v manj, kot v najbolj onesnažena. Primer take je obremenjena Šmartinska cesta blizu Ortobara, kjer je društvo Focus
+            v raziskavi zaznalo še posebej visoke koncentracije NO₂.',
+            'tags' => 'MERILNA MREŽA / PM2.5 / NO₂',
+        ],
     ];
 
     $icons = [
@@ -64,6 +73,7 @@
         'heating' => '<path d="M12 22c4.5 0 7-3.2 7-7 0-3-1.5-5-4-7 .2 3-1 4-2 4 0-4-1-7-4-10 .5 4-4 6-4 13 0 3.8 2.5 7 7 7Z"/><path d="M12 22c2.2 0 3.5-1.5 3.5-3.5 0-1.8-1-3-2.5-4-.1 2-2.5 3-2.5 4.5 0 1.8.5 3 1.5 3Z"/>',
         'wind' => '<path d="M3 8h12a3 3 0 1 0-3-3M2 12h18a2 2 0 1 1-2 2M4 16h8a3 3 0 1 1-3 3"/>',
         'alert' => '<path d="M12 3 2 21h20L12 3Z"/><path d="M12 9v5m0 3v.5"/>',
+        'monitoring' => '<rect x="7" y="9" width="10" height="9" rx="1"/><path d="M12 9V3m-3 0h6M12 18v4M7 22h10M9 13h6m-6 3h3"/><path d="M5 5a10 10 0 0 0-2 6m16-6a10 10 0 0 1 2 6"/>',
     ];
     ?>
 
@@ -101,6 +111,19 @@
                                 ENT_QUOTES,
                                 'UTF-8'
                             ) ?>
+
+                            <?php if (!empty($measure['source'])): ?>
+                                <a
+                                    href="<?= htmlspecialchars(
+                                        $measure['source'],
+                                        ENT_QUOTES,
+                                        'UTF-8'
+                                    ) ?>"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="measure-source"
+                                >VIR ↗</a>
+                            <?php endif; ?>
                         </p>
 
                         <span class="measure-tags">
@@ -109,6 +132,7 @@
                                 ENT_QUOTES,
                                 'UTF-8'
                             ) ?>
+
                         </span>
                     </div>
                 </article>

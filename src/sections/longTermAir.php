@@ -108,7 +108,7 @@ if ($annualJson === false) {
     </div>
 
     <p class="long-term-period">
-        LETNA POVPREČJA V LETU 2025
+        LETNA POVPREČJA 2025 NAPRAM MEJNIM VREDNOSTIM
     </p>
 
     <div
