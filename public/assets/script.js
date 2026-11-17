@@ -80,31 +80,22 @@ function findNearestStation(lat, lon) {
 
 
 function markNearestStation(area) {
-  const label = document.getElementById('geo-selected-label');
-  let found = false;
+    let found = false;
 
-  document.querySelectorAll('.station-card[data-area]')
-      .forEach(card => {
-          const isNearest = card.dataset.area === area;
+    document.querySelectorAll('.station-card[data-area]')
+        .forEach(card => {
+            const isNearest = card.dataset.area === area;
 
-          card.classList.remove('is-nearest');
+            card.classList.remove('is-nearest');
 
-          if (isNearest) {
-              void card.offsetWidth;
-              card.classList.add('is-nearest');
-          }
+            if (isNearest) {
+                void card.offsetWidth;
+                card.classList.add('is-nearest');
+                found = true;
+            }
+        });
 
-          if (isNearest) {
-              found = true;
-          }
-      });
-
-  if (label) {
-      label.textContent = 'NAJBLIŽJA';
-      label.hidden = !found;
-  }
-
-  return found;
+    return found;
 }
 
 
@@ -161,6 +152,8 @@ function tryGeolocate() {
 
         if (message) {
             showStatus(message);
+        } else if (label) {
+            label.hidden = true;
         }
     };
 
