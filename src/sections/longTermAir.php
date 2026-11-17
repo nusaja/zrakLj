@@ -107,10 +107,6 @@ if ($annualJson === false) {
         </label>
     </div>
 
-    <p class="long-term-period">
-        LETNA POVPREČJA 2025 NAPRAM MEJNIM VREDNOSTIM
-    </p>
-
     <div
         class="chart-wrap long-term-chart-wrap"
         style="height: 360px;"
@@ -237,6 +233,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const chart = new Chart(canvas, {
         type: 'bar',
+
+        plugins: [
+            window.zrakLJWatermark
+        ],
 
         data: {
             labels: initial.labels,

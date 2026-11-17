@@ -217,18 +217,19 @@ foreach (AREA_TO_STATION as $areaKey => $stationName):
             title="Najbližja merilna postaja"
             aria-label="Najbližja merilna postaja"
         >
-            <svg xmlns="http://www.w3.org/2000/svg"
-                 width="20" height="20"
-                 viewBox="0 0 24 24"
-                 fill="none"
-                 stroke="currentColor"
-                 stroke-width="1.8"
-                 stroke-linecap="round"
-                 stroke-linejoin="round"
-                 aria-hidden="true">
-                <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/>
-                <circle cx="12" cy="10" r="2.5"/>
-            </svg>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    width="20" height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true">
+                    <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/>
+                    <circle cx="12" cy="10" r="2.5"/>
+                </svg>
+            <span>NAJBLIŽJA</span>
         </span>
     </div>
 
@@ -245,11 +246,12 @@ foreach (AREA_TO_STATION as $areaKey => $stationName):
             <?php
                 $value = $values[$key] ?? null;
 
-                // Pikica samo pri dejanski meritvi,
-                // ki določa prikazano kategorijo.
-                $isMain = $value !== null
-                    && $mainPollutant === $key
-                    && !$isQualityEstimated;
+                // Pikica pri dejanski meritvi, zvezdica pri informativnem približku.
+                $isMain = $mainPollutant === $key
+                    && (
+                        $value !== null
+                        || isset($estimatedValues[$stationName][$key])
+                    );
             ?>
 
             <div class="station-value<?= $isMain ? ' is-main' : '' ?>">
@@ -258,9 +260,9 @@ foreach (AREA_TO_STATION as $areaKey => $stationName):
 
                     <?php if ($isMain): ?>
                         <span
-                            class="pollutant-indicator"
+                            class="pollutant-indicator<?= $isQualityEstimated ? ' estimated' : '' ?>"
                             aria-label="Onesnaževalo, ki določa kakovost zraka"
-                        >●</span>
+                        ><?= $isQualityEstimated ? '*' : '●' ?></span>
                     <?php endif; ?>
                 </span>
 
@@ -270,7 +272,11 @@ foreach (AREA_TO_STATION as $areaKey => $stationName):
                     <?php elseif (is_string($value)): ?>
                         <?= $escapeAir($value) ?>
                     <?php else: ?>
-                        <?= $escapeAir(number_format($value, 1, ',', '')) ?>
+                        <?= $escapeAir(
+                            ((float) $value == (int) $value)
+                                ? (string) (int) $value
+                                : number_format($value, 1, ',', '')
+                        ) ?>
                     <?php endif; ?>
                 </strong>
             </div>

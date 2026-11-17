@@ -803,6 +803,42 @@ function createChartReferencePlugin(getReference) {
     };
 }
 
+
+// ==========================================
+// WATERMARK — ZRAKLJ
+// ==========================================
+
+const zrakLJWatermark = {
+    id: 'zrakLJWatermark',
+
+    afterDraw(chart) {
+        const { ctx, chartArea } = chart;
+
+        if (!chartArea) {
+            return;
+        }
+
+        ctx.save();
+
+        ctx.globalAlpha = 0.4;
+        ctx.fillStyle = '#171717';
+        ctx.font = '600 14px "Roboto Mono", monospace';
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'bottom';
+
+        ctx.fillText(
+            'zrakLJ',
+            chartArea.right - 5,
+            chartArea.bottom - 5
+        );
+
+        ctx.restore();
+    }
+};
+
+window.zrakLJWatermark = zrakLJWatermark;
+
+
 // ==========================================
 // 9. ZGODOVINSKI GRAF
 // ==========================================
@@ -1130,7 +1166,8 @@ function initializeHistoryChart() {
 
         plugins: [
             weekendBackground,
-            referencePlugin
+            referencePlugin,
+            zrakLJWatermark
         ],
 
         data: {

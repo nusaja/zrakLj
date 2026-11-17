@@ -197,6 +197,7 @@ a {
   background: transparent;
   color: var(--ink);
   flex-shrink: 0;
+  
 }
 
 .geo-icon-button:hover {
@@ -319,6 +320,13 @@ a {
   color: var(--ink);
   font-size: 9px;
   vertical-align: middle;
+}
+
+.pollutant-indicator.estimated {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 0;
+  vertical-align: baseline;
 }
 
 .station-value strong {
@@ -1325,14 +1333,14 @@ a {
     }
 
     .chart-reference-legend-row {
-        gap: 10px;
+        gap: 14px;
         padding: 11px 0;
     }
 
     .chart-reference-legend-color {
-        flex-basis: 18px;
-        width: 18px;
-        height: 18px;
+        flex-basis: 28px;
+        width: 28px;
+        height: 28px;
     }
 
     .chart-reference-legend-name {
@@ -1507,9 +1515,25 @@ a {
 
 .pollutant-info-row {
     display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+}
+
+.pollutant-icon {
+    width: 28px;
+    height: 28px;
+    flex: 0 0 28px;
+    color: var(--ink);
+}
+
+.pollutant-info-content {
+    display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 4px;
+    flex: 1;
+    min-width: 0;
 }
 
 .pollutant-info-row strong {
@@ -1566,7 +1590,9 @@ a {
     }
 
     .current-air-info .pollutant-info-row {
-        padding-left: 26px;
+        flex-direction: row;
+        align-items: center;
+        gap: 14px;
     }
 
     .current-air-info .pollutant-info-row span {

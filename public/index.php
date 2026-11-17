@@ -340,9 +340,7 @@ $chartReferencesJson = encode_page_json($chartReferences);
                     <span
                         id="geo-selected-label"
                         class="geo-selected-label"
-                        hidden
                     >
-                        NAJBLIŽJA
                     </span>
 
                     <button
@@ -394,15 +392,15 @@ $chartReferencesJson = encode_page_json($chartReferences);
                 <span class="note-marker">*</span>Kategorijo EEA z zvezdico je določil informativni približek. 
                 Kadar meritev posameznega onesnaževala manjka, 
                 uporabimo razpoložljive meritve drugih ljubljanskih postaj oziroma njihovo povprečje. 
-                Dejanske koncentracije se lahko razlikujejo.<strong> Informativni približki so pomembni, 
+                Dejanske koncentracije se lahko razlikujejo. Informativni približki so pomembni, 
                 saj to, da se posameznega onesnaževala ne meri, ne pomeni, da tega onesnaževala ni. 
                 Bolj verjetno je, da je le-to vsaj okvirno primerljivo z vrednostmi drugih merilnih postaj v Ljubljani,
-                kot pa da bi bilo odsotno.</strong>
+                kot pa da bi bilo odsotno.
                 <?php endif; ?>
                 <br>
-                "n.p." pomeni, da ARSO meritve ni objavil ali pa onesnaževala sploh ne meri.
+                <strong>n.p.</strong> pomeni, da ARSO meritve ni objavil ali pa onesnaževala sploh ne meri.
                 <br>
-                VIR MERITEV: ARSO · µg/m³. Meritve niso prikaz vsesplošne kvalitete zraka v Ljubljani. 
+                VIR MERITEV: ARSO · µg/m³.  
             </p>
 
             <?php
@@ -467,30 +465,88 @@ $chartReferencesJson = encode_page_json($chartReferences);
     </div>
 
     <div class="current-air-info-column">
-
+        
         <div class="pollutant-info-list">
 
             <div class="pollutant-info-row">
-                <strong>PM2.5</strong>
-                <span>Zelo drobni delci iz prometa, kurjenja in drugih virov, ki prodrejo globoko v pljuča, lahko prehajajo v krvni obtok ter prispevajo k vnetjem in boleznim srca in ožilja.</span>
+                <svg class="pollutant-icon" viewBox="0 0 64 64" aria-hidden="true">
+                    <g fill="currentColor">
+                        <circle cx="15" cy="17" r="3"/>
+                        <circle cx="34" cy="12" r="2"/>
+                        <circle cx="48" cy="25" r="4"/>
+                        <circle cx="24" cy="34" r="4"/>
+                        <circle cx="43" cy="46" r="2.5"/>
+                        <circle cx="12" cy="50" r="2"/>
+                        <circle cx="31" cy="54" r="2"/>
+                        <circle cx="54" cy="10" r="1.5"/>
+                        <circle cx="8" cy="33" r="1.5"/>
+                    </g>
+                </svg>
+
+                <div class="pollutant-info-content">
+                    <strong>PM2.5</strong>
+                    <span>Zelo drobni delci iz prometa, kurjenja in drugih virov, ki prodrejo globoko v pljuča, lahko prehajajo v krvni obtok ter prispevajo k vnetjem in boleznim srca in ožilja.</span>
+                </div>
             </div>
 
             <div class="pollutant-info-row">
-                <strong>PM10</strong>
-                <span>Večji delci iz cestnega prahu, prometa in kurjenja, ki dražijo dihala, povzročajo vnetne odzive in poslabšujejo bolezni dihal.</span>
+                <svg class="pollutant-icon" viewBox="0 0 64 64" aria-hidden="true">
+                    <g fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M12 18l8-5 7 7-4 9-10-2z"/>
+                        <path d="M39 10l10 3 2 11-9 5-7-8z"/>
+                        <path d="M23 39l10-5 9 7-3 11-12 2-7-7z"/>
+                    </g>
+                    <g fill="currentColor">
+                        <circle cx="53" cy="48" r="3"/>
+                        <circle cx="10" cy="47" r="2"/>
+                    </g>
+                </svg>
+
+                <div class="pollutant-info-content">
+                    <strong>PM10</strong>
+                    <span>Večji delci iz cestnega prahu, prometa in kurjenja, ki dražijo dihala, povzročajo vnetne odzive in poslabšujejo bolezni dihal.</span>
+                </div>
             </div>
 
             <div class="pollutant-info-row">
-                <strong>O₃</strong>
-                <span>Prizemni ozon, ki nastaja ob sončni svetlobi iz drugih onesnaževal ter povzroča vnetje dihalnih poti, otežuje dihanje in poslabšuje astmo.</span>
+                <svg class="pollutant-icon" viewBox="0 0 64 64" aria-hidden="true">
+                    <g fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                        <path d="M32 32 L8.9 19.0 M32 32 L55.1 19.0"/>
+                    </g>
+                    <g fill="currentColor">
+                        <circle cx="32" cy="32" r="7"/>
+                        <circle cx="8.9" cy="19" r="7"/>
+                        <circle cx="55.1" cy="19" r="7"/>
+                    </g>
+                </svg>
+
+                <div class="pollutant-info-content">
+                    <strong>O₃</strong>
+                    <span>Prizemni ozon, ki nastaja ob sončni svetlobi iz drugih onesnaževal ter povzroča vnetje dihalnih poti, otežuje dihanje in poslabšuje astmo.</span>
+                </div>
             </div>
 
             <div class="pollutant-info-row">
-                <strong>NO₂</strong>
-                <span>Plin predvsem iz prometa in drugih procesov zgorevanja, ki povzroča vnetje dihalnih poti, poslabšuje astmo in prispeva k nastajanju prizemnega ozona.</span>
+                <svg class="pollutant-icon" viewBox="0 0 64 64" aria-hidden="true">
+                    <g fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                        <path d="M32 32 L6.5 20.1 M32 32 L57.5 20.1"/>
+                    </g>
+                    <g fill="currentColor">
+                        <circle cx="32" cy="32" r="7"/>
+                        <circle cx="6.5" cy="20.1" r="7"/>
+                        <circle cx="57.5" cy="20.1" r="7"/>
+                    </g>
+                </svg>
+
+                <div class="pollutant-info-content">
+                    <strong>NO₂</strong>
+                    <span>Plin predvsem iz prometa in drugih procesov zgorevanja, ki povzroča vnetje dihalnih poti, poslabšuje astmo in prispeva k nastajanju prizemnega ozona.</span>
+                </div>
             </div>
 
         </div>
+
+
 
     </div>
 
