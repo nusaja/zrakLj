@@ -400,7 +400,7 @@ $chartReferencesJson = encode_page_json($chartReferences);
                 <br>
                 <strong>n.p.</strong> pomeni, da ARSO meritve ni objavil ali pa onesnaževala sploh ne meri.
                 <br>
-                VIR MERITEV: ARSO · µg/m³.  
+                VIR MERITEV: ARSO  
             </p>
 
             <?php

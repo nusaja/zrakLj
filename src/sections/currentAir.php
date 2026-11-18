@@ -277,6 +277,7 @@ foreach (AREA_TO_STATION as $areaKey => $stationName):
                                 ? (string) (int) $value
                                 : number_format($value, 1, ',', '')
                         ) ?>
+                        <span class="station-bottom">µg/m³</span>
                     <?php endif; ?>
                 </strong>
             </div>

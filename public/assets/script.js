@@ -131,7 +131,7 @@ function tryGeolocate() {
         button.disabled = true;
     }
 
-    showStatus('PRIDOBIVAM LOKACIJO ...');
+    showStatus('...');
 
     let watchId = null;
     let finished = false;
@@ -174,7 +174,7 @@ function tryGeolocate() {
                 !Number.isFinite(accuracy) ||
                 accuracy > MAX_ACCURACY
             ) {
-                showStatus('PRIDOBIVAM LOKACIJO ...');
+                showStatus('...');
                 return;
             }
 
@@ -203,7 +203,7 @@ function tryGeolocate() {
 
             // Ob začasni napaki počakaj do skupne omejitve.
             if (error.code === 2 || error.code === 3) {
-                showStatus('PRIDOBIVAM LOKACIJO ...');
+                showStatus('...');
                 return;
             }
 
@@ -212,7 +212,7 @@ function tryGeolocate() {
 
         {
             enableHighAccuracy: true,
-            timeout: 15000,
+            timeout: 10000,
             maximumAge: 0
         }
     );
@@ -1176,9 +1176,13 @@ function initializeHistoryChart() {
             responsive: true,
             maintainAspectRatio: false,
 
+            events: window.matchMedia('(hover: hover) and (pointer: fine)').matches
+                ? ['mousemove', 'mouseout', 'click']
+                : ['click'],
+
             interaction: {
                 mode: 'index',
-                intersect: false
+                intersect: !window.matchMedia('(hover: hover) and (pointer: fine)').matches
             },
 
             plugins: {
@@ -1432,6 +1436,12 @@ function initializeHistoryChart() {
 
     window.historyChart = chart;
 
+    document.addEventListener('pointerdown', event => {
+    if (!canvas.contains(event.target)) {
+        chart.tooltip.setActiveElements([], { x: 0, y: 0 });
+        chart.update('none');
+    }
+    });
     // ======================================
     // POSODOBITEV GRAFA
     // ======================================

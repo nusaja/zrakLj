@@ -181,6 +181,10 @@ a {
   letter-spacing: -0.045em;
 }
 
+#izboljsave.content-section {
+    padding-block: 40px 0;
+}
+
 /* ==========================================
    GEOLOKACIJA
    ========================================== */
@@ -1380,6 +1384,10 @@ a {
     gap: 24px;
 }
 
+.current-measurement-toolbar .geo-selected-label {
+    margin-right: -16px;
+}
+
 .current-measurement-toolbar .measurement-period {
     margin: 0;
 }
@@ -1440,7 +1448,7 @@ a {
     margin-left: auto;
 }
 
-/* Označena ajbližja postaja */
+/* Označena najbližja postaja */
 
 .station-card.is-nearest {
     background-color: transparent;
